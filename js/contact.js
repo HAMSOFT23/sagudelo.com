@@ -1,5 +1,6 @@
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function ()
+{
 
   // Get all the elements we'll need
   const contactForm = document.getElementById('contactForm');
@@ -18,14 +19,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 3. Gather all the form data
     const formData = new FormData(contactForm);
-    const data = {
+    const data =
+    {
       name: formData.get('name'),
       email: formData.get('email'),
       subject: formData.get('subject'), // We get the subject from your form!
       message: formData.get('message')
     };
 
-    try {
+    try
+    {
       // 4. Send the data to our backend serverless function
       const response = await fetch('/functions/sendMail',
         {
@@ -38,24 +41,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
       // 5. Handle the response from the backend
-      if (response.ok) {
+      if (response.ok)
+      {
         // Success!
         formStatus.textContent = 'Message sent successfully!';
         formStatus.style.color = 'green';
         contactForm.reset(); // Clear the form fields
-      } else {
+      }
+      else
+      {
         // Server error (e.g., Resend failed)
         const errorData = await response.json();
         formStatus.textContent = `Error: ${errorData.message || 'Something went wrong.'}`;
         formStatus.style.color = 'red';
       }
 
-    } catch (error) {
+    }
+    catch (error)
+    {
       // Network error (e.g., user is offline)
       console.error('Submission error:', error);
       formStatus.textContent = 'Error: Could not send message. Please check your connection.';
       formStatus.style.color = 'red';
-    } finally {
+    }
+    finally
+    {
       // 6. Re-enable the submit button regardless of outcome
       submitButton.disabled = false;
     }
