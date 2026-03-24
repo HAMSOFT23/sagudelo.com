@@ -1,74 +1,81 @@
-
-document.addEventListener('DOMContentLoaded', function ()
-{
-
-  // Get all the elements we'll need
+document.addEventListener('DOMContentLoaded', function () {
   const contactForm = document.getElementById('contactForm');
   const submitButton = document.getElementById('submit-button');
   const formStatus = document.getElementById('form-status');
 
-  contactForm.addEventListener('submit', async function (event)
-  {
-    // 1. Prevent the form's default "submit" behavior
+  contactForm.addEventListener('submit', async function (event) {
+    // 1. Prevent the form from refreshing the page
     event.preventDefault();
 
-    // 2. Disable the button and show a "sending" message
+    // 2. Disable the button and show a loading state
     submitButton.disabled = true;
-    formStatus.textContent = 'Sending...';
-    formStatus.style.color = '#333'; // Reset color
-
-    // 3. Gather all the form data
+    submitButton.textContent = 'Sending...';
+    formStatus.textContent = '';
+    formStatus.className = ''; // Reset classes
+    
+    // 3. Gather and clean the form data
     const formData = new FormData(contactForm);
-    const data =
-    {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      subject: formData.get('subject'), // We get the subject from your form!
-      message: formData.get('message')
+    const data = {
+      name: formData.get('name').trim(),
+      email: formData.get('email').trim(),
+      subject: formData.get('subject').trim(),
+      message: formData.get('message').trim()
     };
 
-    try
-    {
-      // 4. Send the data to our backend serverless function
-      const response = await fetch('/functions/sendMail',
-        {
+    // Basic Validation: Check for empty fields
+    if (!data.name || !data.email || !data.subject || !data.message) {
+      showStatus('Please fill out all fields.', 'status-error');
+      resetButton();
+      return;
+    }
+
+    // Basic Validation: Check email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+      showStatus('Please enter a valid email address.', 'status-error');
+      resetButton();
+      return;
+    }
+
+    try {
+      // 4. Send the data to your Cloudflare Pages Function
+      // Note: Cloudflare maps the 'functions' folder to the root of your site.
+      // So a file at 'functions/sendMail.js' is accessed via '/sendMail'
+      const response = await fetch('/sendMail', {
         method: 'POST',
-        headers:
-        {
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-        });
+      });
 
-      // 5. Handle the response from the backend
-      if (response.ok)
-      {
-        // Success!
-        formStatus.textContent = 'Message sent successfully!';
-        formStatus.style.color = 'green';
-        contactForm.reset(); // Clear the form fields
-      }
-      else
-      {
-        // Server error (e.g., Resend failed)
-        const errorData = await response.json();
-        formStatus.textContent = `Error: ${errorData.message || 'Something went wrong.'}`;
-        formStatus.style.color = 'red';
-      }
+      const result = await response.json();
 
-    }
-    catch (error)
-    {
-      // Network error (e.g., user is offline)
+      // 5. Handle the response
+      if (response.ok) {
+        showStatus('Message sent successfully! I will get back to you soon.', 'status-success');
+        contactForm.reset(); // Clear the form
+      } else {
+        showStatus(`Error: ${result.message || 'Something went wrong.'}`, 'status-error');
+      }
+    } catch (error) {
       console.error('Submission error:', error);
-      formStatus.textContent = 'Error: Could not send message. Please check your connection.';
-      formStatus.style.color = 'red';
+      showStatus('Error: Could not send message. Please check your internet connection.', 'status-error');
+    } finally {
+      // 6. Always re-enable the button when done
+      resetButton();
     }
-    finally
-    {
-      // 6. Re-enable the submit button regardless of outcome
-      submitButton.disabled = false;
-    }
-
   });
+
+  // Helper function to display messages
+  function showStatus(message, className) {
+    formStatus.textContent = message;
+    formStatus.className = className;
+  }
+
+  // Helper function to reset the submit button
+  function resetButton() {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Send Message';
+  }
 });
