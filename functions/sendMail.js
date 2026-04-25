@@ -27,7 +27,7 @@ export async function onRequestPost(context) {
     const { data: resendData, error } = await resend.emails.send
     ({
       from: 'Contact Form <onboarding@resend.dev>', // See Note 1
-      to: ['samuelagudelo534@gmail.com'],      // <-- REPLACE with your actual email
+      to: ['samuel.agudelo534@gmail.com'],      // <-- REPLACE with your actual email
       subject: `New Message: ${data.subject}`,
       reply_to: data.email, // So you can reply directly to the user
       html: `
