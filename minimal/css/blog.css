@@ -1,0 +1,64 @@
+main
+{
+    display: block;
+}
+
+.back-link
+{
+    color: var(--foreground);
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 300;
+}
+
+.back-link:hover
+{
+    text-decoration: underline;
+}
+
+.blog-list
+{
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    margin-top: 32px;
+}
+
+.blog-entry
+{
+    max-width: 650px;
+}
+
+.blog-entry time
+{
+    margin: 0;
+    font-size: clamp(10px, 1.2vw, 14px);
+    opacity: 0.6;
+}
+
+.blog-entry h2
+{
+    font-size: clamp(18px, 2.2vw, 28px);
+    font-weight: 300;
+    margin: 0 0 8px;
+    transform: rotate(-1deg);
+}
+
+.blog-entry p
+{
+    opacity: 0.8;
+    margin: 0;
+}
+
+@media only screen and (max-width: 768px)
+{
+    .blog-list
+    {
+        gap: 32px;
+    }
+
+    .blog-entry h2
+    {
+        transform: rotate(0deg);
+    }
+}
