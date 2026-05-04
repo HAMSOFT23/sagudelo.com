@@ -1,6 +1,6 @@
 (function()
 {
-    const strength = 5;
+    const strength = 8;
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
     document.addEventListener('mousemove', function(e)

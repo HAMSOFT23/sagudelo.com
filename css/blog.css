@@ -36,12 +36,18 @@ main
     opacity: 0.6;
 }
 
+.blog-entry h2 a
+{
+    color: var(--foreground);
+    text-decoration: none;
+}
+
 .blog-entry h2
 {
-    font-size: clamp(18px, 2.2vw, 28px);
+    font-size: clamp(14px, 1.8vw, 22px);
     font-weight: 300;
     margin: 0 0 8px;
-    transform: rotate(-1deg);
+    transform: rotate(0deg);
 }
 
 .blog-entry p
@@ -55,10 +61,5 @@ main
     .blog-list
     {
         gap: 32px;
-    }
-
-    .blog-entry h2
-    {
-        transform: rotate(0deg);
     }
 }

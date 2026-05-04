@@ -1,0 +1,57 @@
+.photos-header
+{
+    text-align: center;
+    padding: 32px 16px 16px;
+    position: relative;
+    z-index: 10;
+}
+
+.photos-header h1
+{
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 300;
+    margin-bottom: 8px;
+}
+
+.photos-header p
+{
+    font-size: clamp(12px, 1.5vw, 16px);
+    opacity: 0.6;
+}
+
+#photo-canvas
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.floating-photo
+{
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.floating-photo img
+{
+    display: block;
+    max-width: 240px;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+@media only screen and (max-width: 768px)
+{
+    .floating-photo img
+    {
+        max-width: 160px;
+        max-height: 160px;
+    }
+}

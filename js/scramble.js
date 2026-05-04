@@ -7,8 +7,14 @@
         return CHARS[Math.floor(Math.random() * CHARS.length)];
     }
 
-    document.querySelectorAll('a').forEach(function(link)
+    document.addEventListener('mouseover', function(e)
     {
+        const link = e.target.closest('a');
+        if (!link || link.dataset.scrambleBound) return;
+        if (!link.textContent.trim()) return;
+
+        link.dataset.scrambleBound = 'true';
+
         link.addEventListener('mouseenter', function()
         {
             if (!this.dataset.original)
